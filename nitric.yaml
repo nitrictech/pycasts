@@ -1,0 +1,18 @@
+name: ai-podcast
+services:
+  - match: services/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: python
+batch-services:
+  - match: batches/*.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: torch
+
+runtimes:
+  python:
+    dockerfile: './python.dockerfile'
+  torch:
+    dockerfile: './torch.dockerfile'
+
+preview:
+  - batch-services

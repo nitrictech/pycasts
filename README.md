@@ -28,7 +28,7 @@ To run this project you'll need the [Nitric CLI](https://nitric.io/docs/installa
 Start by making sure the project's dependencies have been installed.
 
 ```bash
-pipenv install --dev
+pipenv install --categories="packages dev ml"
 ```
 
 Next, start nitric services.

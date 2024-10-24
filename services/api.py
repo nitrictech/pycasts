@@ -1,4 +1,4 @@
-from common.resources import main_api, model_dir, cache_dir, zip_path, gen_audio_job, download_audio_model_topic, models_bucket
+from common.resources import main_api, model_dir, cache_dir, zip_path, gen_podcast_job, download_audio_model_topic, models_bucket
 from nitric.application import Nitric
 from nitric.context import HttpContext, MessageContext
 from huggingface_hub import snapshot_download
@@ -7,7 +7,7 @@ import zipfile
 import requests
 
 models = models_bucket.allow('write')
-generate_audio = gen_audio_job.allow('submit')
+generate_podcast = gen_podcast_job.allow('submit')
 download_audio_model = download_audio_model_topic.allow("publish")
 
 audio_model_id = "suno/bark"
@@ -56,13 +56,16 @@ async def do_download_audio_model(ctx: MessageContext):
 
 @main_api.post("/download-model")
 async def download_audio(ctx: HttpContext):
-    model_id = ctx.req.query.get("model", audio_model_id)
+    model_id = ctx.req.query.get("model", audio_model_id)\
+    
+    if isinstance(model_id, list):
+        model_id = model_id[0]
     # asynchronously download the model
     await download_audio_model.publish({ "model_id": model_id })
 
 # Generate a text-to-speech audio clip
 # Generate a sample voice line
-@main_api.post("/audio/:filename")
+@main_api.post("/podcast/:filename")
 async def submit_auto(ctx: HttpContext):
     name = ctx.req.params["filename"]
     model_id = ctx.req.query.get("model", audio_model_id)
@@ -81,6 +84,6 @@ async def submit_auto(ctx: HttpContext):
 
     print(f"using preset {preset}")
 
-    await generate_audio.submit({"file": name, "model_id": model_id, "text": body.decode('utf-8'), "preset": preset})
+    await generate_podcast.submit({"file": name, "prompt": body.decode('utf-8')})
 
 Nitric.run()

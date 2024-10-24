@@ -35,7 +35,7 @@ RUN apt-get update -y && \
   ln -sf /usr/bin/python3.11 /usr/local/bin/python3.11
 
 # Copy the application from the builder
-COPY --from=builder --chown=app:app /app /app
+COPY --from=builder /app /app
 WORKDIR /app
 
 # Place executables in the environment at the front of the path

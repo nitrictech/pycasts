@@ -4,15 +4,20 @@ services:
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
     runtime: python
 batch-services:
-  - match: batches/*.py
+  - match: batches/podcast.py
     start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
     runtime: torch
+  - match: batches/script.py
+    start: uv run watchmedo auto-restart -p *.py --no-restart-on-command-exit -R python -- -u $SERVICE_PATH
+    runtime: llama
 
 runtimes:
   python:
     dockerfile: './python.dockerfile'
   torch:
     dockerfile: './torch.dockerfile'
+  llama:
+    dockerfile: './llama.dockerfile'
 
 preview:
   - batch-services

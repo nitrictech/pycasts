@@ -1,4 +1,5 @@
 .nitric/
 .model/
+models/
 model.zip
 __pycache__

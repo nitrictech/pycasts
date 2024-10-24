@@ -5,9 +5,12 @@ import tempfile
 main_api = api("main")
 # A job for generating our audio content
 gen_audio_job = job("audio")
+# A job for generating our audio script
+gen_podcast_job = job("podcast")
 
 # A bucket for storing output audio clips
 clips_bucket = bucket("clips")
+scripts_bucket = bucket("scripts")
 # And another bucket for storing our models
 models_bucket = bucket("models")
 

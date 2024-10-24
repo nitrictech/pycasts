@@ -16,6 +16,9 @@ ml = [
     "torch>=2.4.1",
     "transformers>=4.45.2",
 ]
+llm = [
+    "llama-cpp-python>=0.3.1",
+]
 
 [tool.uv]
 dev-dependencies = [

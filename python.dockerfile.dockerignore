@@ -2,6 +2,7 @@
 .nitric/
 .venv/
 .model/
+models/
 nitric-spec.json
 nitric.yaml
 nitric.*.yaml

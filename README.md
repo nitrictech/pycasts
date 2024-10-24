@@ -1,42 +1,55 @@
-<p align="center"><a href="https://nitric.io" target="_blank"><img src="https://raw.githubusercontent.com/nitrictech/nitric/main/docs/assets/nitric-logo.svg" height="120"></a></p>
+## Pycasts
 
-## About Nitric
+Pycasts is a reference API for producing long form spoken audio and scripts for podcasts, powered by [Nitric](https://github.com/nitrictech/nitric), [Suno Bark](https://huggingface.co/suno/bark) and [Llama 3.2](https://www.llama.com/). 
 
-This is a [Nitric](https://nitric.io) Python project, but Nitric is a framework for rapid development of cloud-native and serverless applications in many languages.
+Here's a sample of what can be produced with this project:
 
-Using Nitric you define your apps in terms of the resources they need, then write the code for serverless function based APIs, event subscribers and scheduled jobs.
+[power-rangers.webm](https://github.com/user-attachments/assets/bcb03055-c5d6-4883-8d0f-45fdf45191ca)
 
-Apps built with Nitric can be deployed to AWS, Azure or Google Cloud all from the same code base so you can focus on your products, not your cloud provider.
+## Running locally
 
-Nitric makes it easy to:
-
-- Create smart [serverless functions and APIs](https://nitric.io/docs/apis)
-- Build reliable distributed apps that use [events](https://nitric.io/docs/messaging/topics) and/or [queues](https://nitric.io/docs/messaging/queues)
-- Securely store, retrieve and rotate [secrets](https://nitric.io/docs/secrets)
-- Read and write files from [buckets](https://nitric.io/docs/storage)
-
-## Learning Nitric
-
-Nitric provides detailed and intuitive [documentation](https://nitric.io/docs) and [guides](https://nitric.io/docs/getting-started) to help you get started quickly.
-
-If you'd rather chat with the maintainers or community, come and join our [Discord](https://nitric.io/chat) server, [GitHub Discussions](https://github.com/nitrictech/nitric/discussions) or find us on [Twitter](https://twitter.com/nitric_io).
-
-## Running this project
-
-To run this project you'll need the [Nitric CLI](https://nitric.io/docs/installation) installed, then you can use the CLI commands to run, build or deploy the project.
-
-Start by making sure the project's dependencies have been installed.
+First off install project dependencies:
 
 ```bash
-pipenv install --categories="packages dev ml"
+uv sync --all-extras
 ```
 
-Next, start nitric services.
+This project uses also uses smaller LLMs for producing podcast scripts, which is baked directly into the resulting container when we deploy, via the `models` directory of the project.
 
-> This will automatically restart when you make changes to your functions
+This can be populated by downloading an appropriately sized and quantized Llama 3.2 model. As an example:
 
+```bash
+mkdir models
+curl -L https://huggingface.co/bartowski/Llama-3.2-3B-Instruct-GGUF/resolve/main/Llama-3.2-3B-Instruct-Q4_K_L.gguf -o models/Llama-3.2-3B-Instruct-Q4_K_L.gguf
+```
+
+The project can be then run locally by installing the [Nitric CLI](https://nitric.io/docs/get-started/installation). And running
 ```bash
 nitric start
 ```
 
-You'll see your services connect in your nitric start terminal.
+This will start the project on your local machine, and you will be able to use the provided local [nitric dashboard](https://localhost:49152), or your HTTP client of choice to interact with the API.
+
+Audio models are downloaded ahead of time using the API to be stored locally in a bucket, this can be done by hitting the `/download-model` endpoint:
+
+```bash
+curl -X POST http://localhost:4001/download-model
+```
+> Assuming your API is hosted on 4001 (check your CLI output for `nitric start`).
+
+## Deploying this project
+
+Nitric provides detailed and intuitive [documentation](https://nitric.io/docs) and [guides](https://nitric.io/docs/getting-started) to help you get started quickly.
+
+If you'd rather chat with the maintainers or community, come and join our [Discord](https://nitric.io/chat) server, [GitHub Discussions](https://github.com/nitrictech/nitric/discussions) or find us on [X](https://x.com/nitric_io).
+
+A reference for deploying to AWS is provided along with the project under `nitric.aws.yaml`. 
+
+## Possible project extensions
+
+- [ ] Remove API endpoints and make podcasts on a schedule
+- [ ] Use different voice models
+- [ ] Add support for multiple speakers
+
+
+

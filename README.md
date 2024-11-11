@@ -1,10 +1,12 @@
 ## Pycasts
 
-Pycasts is a reference API for producing long form spoken audio and scripts for podcasts, powered by [Nitric](https://github.com/nitrictech/nitric), [Suno Bark](https://huggingface.co/suno/bark) and [Llama 3.2](https://www.llama.com/). 
+Pycasts is a reference API for producing long form spoken audio and scripts for podcasts, powered by [Nitric](https://github.com/nitrictech/nitric), [Suno Bark](https://huggingface.co/suno/bark) and [Llama 3.2](https://www.llama.com/).
 
 Here's a sample of what can be produced with this project:
 
 [power-rangers.webm](https://github.com/user-attachments/assets/bcb03055-c5d6-4883-8d0f-45fdf45191ca)
+
+If you'd like a step-through guide on producing this API see [here](https://nitric.io/docs/guides/python/ai-podcast-part-1)
 
 ## Running locally
 
@@ -37,13 +39,29 @@ curl -X POST http://localhost:4001/download-model
 ```
 > Assuming your API is hosted on 4001 (check your CLI output for `nitric start`).
 
+Once the model has been fetched you're good to run the start generating podcasts.
+
+For example
+
+```bash
+curl -X POST http://localhost:4001/podcast/peanut \
+     -H "Content-Type: text/plain" \
+     -d "A podcast about the history of the peanut"
+```
+
+Would produce a short podcast style script and audio on the history of the peanut 🥜.
+
+Watch the logs in your CLI to see progress for now. Your output audio will be available in the `clips` bucket once everything has generated. See the local nitric dashboard [storage](http://localhost:49152/storage), to download your finished podcast.
+
 ## Deploying this project
 
-Nitric provides detailed and intuitive [documentation](https://nitric.io/docs) and [guides](https://nitric.io/docs/getting-started) to help you get started quickly.
-
-If you'd rather chat with the maintainers or community, come and join our [Discord](https://nitric.io/chat) server, [GitHub Discussions](https://github.com/nitrictech/nitric/discussions) or find us on [X](https://x.com/nitric_io).
-
 A reference for deploying to AWS is provided along with the project under `nitric.aws.yaml`. 
+
+For info on pre-requisites and setup see the [Nitric AWS provider docs](https://nitric.io/docs/providers/pulumi/aws).
+
+You can also consult this [guide](https://nitric.io/docs/guides/python/ai-podcast-part-1) for instructions specific to this project.
+
+Nitric supports GCP for this app, and may be included as a reference for this project in future as well.
 
 ## Possible project extensions
 
